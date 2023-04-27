@@ -26,7 +26,7 @@ const Sidebar = () => {
   )
   return (
     <div className='col-span-1 h-full pr-4 md:p-4  w-full lg:max-w-[230px]'>
-      <div className='flex flex-col items-center space-y-2 md:items-start'>
+      <div className='flex flex-col items-center space-y-2 lg:space-y-3 md:items-start'>
         {/* nav items */}
         {navLinks.map((nav, index) => {
           const { label, link, Icon, auth } = nav
@@ -50,7 +50,7 @@ const Sidebar = () => {
         {/* logout button */}
         {currentUser && (
           <div
-            className='flex items-center rounded-full  
+            className='flex items-center md:w-full rounded-3xl 
           md:hover:bg-opacity-20 md:hover:bg-slate-300'
             onClick={() => signOut()}
           >
