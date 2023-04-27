@@ -1,8 +1,14 @@
 import { useRouter } from 'next/router'
 import { FaFeather } from 'react-icons/fa'
 import { navLinks } from '../constants'
+import useLoginModel from '@/hooks/useLoginModal'
+import { useCallback } from 'react'
 const Sidebar = () => {
+  const loginModel = useLoginModel()
   const router = useRouter()
+  const onTweet = useCallback(() => {
+    loginModel.onOpen()
+  }, [loginModel])
   return (
     <div className='col-span-1 h-full pr-4 md:p-4  w-full lg:max-w-[230px]'>
       <div className='flex flex-col items-center space-y-2 md:items-start'>
@@ -26,7 +32,10 @@ const Sidebar = () => {
           )
         })}
         {/* tweet button */}
-        <div className='flex items-center justify-center md:w-full rounded-full bg-transparent md:hover:bg-opacity-80 md:bg-sky-500'>
+        <div
+          className='flex items-center justify-center md:w-full rounded-full bg-transparent md:hover:bg-opacity-80 md:bg-sky-500'
+          onClick={onTweet}
+        >
           <div className='rounded-full w-18 h-18 md:h-14 md:w-14 ml-0 md:-ml-2 flex items-center justify-center p-4 md:p-0 bg-sky-500 hover:bg-opacity-80 md:bg-transparent cursor-pointer'>
             <FaFeather size={22} />
           </div>
