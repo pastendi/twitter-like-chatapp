@@ -1,23 +1,39 @@
 import { useRouter } from 'next/router'
 import { FaFeather } from 'react-icons/fa'
 import { navLinks } from '../constants'
+import { signOut } from 'next-auth/react'
 import useLoginModel from '@/hooks/useLoginModal'
 import { useCallback } from 'react'
+import useCurrentUser from '@/hooks/useCurrentUser'
+import { BiLogOut } from 'react-icons/bi'
 const Sidebar = () => {
+  const { data: currentUser } = useCurrentUser()
   const loginModel = useLoginModel()
   const router = useRouter()
   const onTweet = useCallback(() => {
     loginModel.onOpen()
   }, [loginModel])
+
+  const handleNavigation = useCallback(
+    async (auth: boolean, link: string) => {
+      if (auth && !currentUser) {
+        loginModel.onOpen()
+      } else {
+        router.push(link)
+      }
+    },
+    [router, loginModel, currentUser]
+  )
   return (
     <div className='col-span-1 h-full pr-4 md:p-4  w-full lg:max-w-[230px]'>
       <div className='flex flex-col items-center space-y-2 md:items-start'>
         {/* nav items */}
         {navLinks.map((nav, index) => {
-          const { label, link, Icon } = nav
+          const { label, link, Icon, auth } = nav
           return (
             <div
               key={index}
+              onClick={() => handleNavigation(auth, link)}
               className={`flex items-center rounded-full  ${
                 index !== 0 && 'md:w-full rounded-3xl'
               } md:hover:bg-opacity-20 md:hover:bg-slate-300`}
@@ -31,6 +47,19 @@ const Sidebar = () => {
             </div>
           )
         })}
+        {/* logout button */}
+        {currentUser && (
+          <div
+            className='flex items-center rounded-full  
+          md:hover:bg-opacity-20 md:hover:bg-slate-300'
+            onClick={() => signOut()}
+          >
+            <div className='rounded-full w-18 h-18 md:h-14 md:w-14 flex items-center justify-center p-4 hover:bg-slate-300 hover:bg-opacity-20 md:hover:bg-transparent cursor-pointer'>
+              <BiLogOut size={28} />
+            </div>
+            <p className='capitalize hidden md:block'>logout</p>
+          </div>
+        )}
         {/* tweet button */}
         <div
           className='flex items-center justify-center md:w-full rounded-full bg-transparent md:hover:bg-opacity-80 md:bg-sky-500'

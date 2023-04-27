@@ -1,5 +1,6 @@
 import useLoginModel from '@/hooks/useLoginModal'
 import { useCallback, useState } from 'react'
+import { signIn } from 'next-auth/react'
 import Input from './Form/Input'
 import ModalLayout from './ModalLayout'
 import useRegisterModel from '@/hooks/useRegisterModel'
@@ -9,38 +10,42 @@ const LoginModel = () => {
   const registerModel = useRegisterModel()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const onToggle = useCallback(() => {
-    if (loading) return
+    if (isLoading) return
     loginModel.onClose()
     registerModel.onOpen()
-  }, [loginModel, registerModel, loading])
+  }, [loginModel, registerModel, isLoading])
 
   const onSubmit = useCallback(async () => {
     try {
-      setLoading(true)
-      // todo
+      setIsLoading(true)
+      await signIn('credentials', {
+        email,
+        password,
+      })
       loginModel.onClose()
     } catch (error) {
       console.log(error)
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
-  }, [loginModel])
+  }, [loginModel, email, password])
   const body = (
     <div className='flex flex-col gap-4'>
       <Input
         placeholder='Email'
         onChange={(e) => setEmail(e.target.value)}
         value={email}
-        disabled={loading}
+        disabled={isLoading}
       />
       <Input
         placeholder='Password'
+        type='password'
         onChange={(e) => setPassword(e.target.value)}
         value={password}
-        disabled={loading}
+        disabled={isLoading}
       />
     </div>
   )
@@ -57,7 +62,7 @@ const LoginModel = () => {
   )
   return (
     <ModalLayout
-      disabled={loading}
+      disabled={isLoading}
       isOpen={loginModel.isOpen}
       title='login'
       actionLabel='sign in '
