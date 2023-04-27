@@ -30,7 +30,7 @@ const Sidebar = () => {
           <div className='rounded-full w-18 h-18 md:h-14 md:w-14 ml-0 md:-ml-2 flex items-center justify-center p-4 md:p-0 bg-sky-500 hover:bg-opacity-80 md:bg-transparent cursor-pointer'>
             <FaFeather size={22} />
           </div>
-          <p className='capitalize font-semibold hidden md:block md:-ml-2 '>
+          <p className='capitalize font-semibold texl-xl hidden md:block md:-ml-2 '>
             tweet
           </p>
         </div>
