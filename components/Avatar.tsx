@@ -24,7 +24,7 @@ const Avatar: React.FC<Props> = ({ userId, isLarge, hasBorder }) => {
     <div
       className={`${hasBorder && 'border-4 border-black'} ${
         isLarge ? 'h-32 w-32' : 'h-12 w-12'
-      } rounded-full hover:opacity-90 transition cursor-pointer relative`}
+      } rounded-full hover:opacity-90 transition cursor-pointer relative overflow-hidden`}
     >
       <Image
         fill
