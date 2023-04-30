@@ -22,7 +22,7 @@ export const navLinks = [
   },
   {
     label: 'profile',
-    link: '/users/123',
+    link: '/users/',
     Icon: FaUser,
     auth: true,
   },

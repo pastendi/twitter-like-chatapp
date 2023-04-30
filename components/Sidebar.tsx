@@ -18,6 +18,8 @@ const Sidebar = () => {
     async (auth: boolean, link: string) => {
       if (auth && !currentUser) {
         loginModel.onOpen()
+      } else if (link === '/users/') {
+        router.push(link + currentUser?.id)
       } else {
         router.push(link)
       }
