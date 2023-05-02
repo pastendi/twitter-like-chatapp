@@ -1,5 +1,6 @@
 import Header from '@/components/Header'
 import Loading from '@/components/Loading'
+import CommentFeed from '@/components/Posts/CommentFeed'
 import PostItem from '@/components/Posts/PostItem'
 import Tweet from '@/components/Tweet'
 import usePost from '@/hooks/usePost'
@@ -21,6 +22,7 @@ const PostView = () => {
         isComment
         placeholder='Tweet your reply'
       />
+      <CommentFeed comments={post?.comments} />
     </>
   )
 }

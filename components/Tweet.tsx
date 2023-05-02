@@ -30,7 +30,7 @@ const Tweet: React.FC<Props> = ({ placeholder, isComment, postId }) => {
   const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true)
-      const url = isComment ? `/api/comments?postId=${postId}` : '/api/posts'
+      const url = isComment ? `/api/comment?postId=${postId}` : '/api/posts'
       await axios.post(url, { body })
       toast.success('Tweet created')
       setBody('')
