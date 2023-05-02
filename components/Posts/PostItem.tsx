@@ -7,32 +7,40 @@ import useLoginModal from '@/hooks/useLoginModal'
 import useCurrentUser from '@/hooks/useCurrentUser'
 
 import Avatar from '../Avatar'
+import useLike from '@/hooks/useLike'
 interface Props {
-  data: Record<string, any>
-  userId?: string
+  data?: Record<string, any>
 }
 
-const PostItem: React.FC<Props> = ({ data = {}, userId }) => {
+const PostItem: React.FC<Props> = ({ data }) => {
   const router = useRouter()
   const loginModal = useLoginModal()
 
   const { data: currentUser } = useCurrentUser()
+  const { hasLiked, toggleLike } = useLike(data?.id)
 
   const goToUser = useCallback(
     (ev: any) => {
       ev.stopPropagation()
-      router.push(`/users/${data.user.id}`)
+      router.push(`/users/${data?.user.id}`)
     },
-    [router, data.user.id]
+    [router, data?.user.id]
   )
 
   const goToPost = useCallback(() => {
-    router.push(`/posts/${data.id}`)
-  }, [router, data.id])
+    router.push(`/posts/${data?.id}`)
+  }, [router, data?.id])
 
-  const onLike = useCallback(async (ev: any) => {
-    ev.stopPropagation()
-  }, [])
+  const onLike = useCallback(
+    async (ev: any) => {
+      ev.stopPropagation()
+      if (!currentUser) {
+        loginModal.onOpen()
+      }
+      toggleLike()
+    },
+    [loginModal, currentUser, toggleLike]
+  )
 
   const createdAt = useMemo(() => {
     if (!data?.createdAt) {
@@ -40,7 +48,7 @@ const PostItem: React.FC<Props> = ({ data = {}, userId }) => {
     }
 
     return formatDistanceToNowStrict(new Date(data.createdAt))
-  }, [data.createdAt])
+  }, [data?.createdAt])
 
   return (
     <div
@@ -55,7 +63,7 @@ const PostItem: React.FC<Props> = ({ data = {}, userId }) => {
       '
     >
       <div className='flex flex-row items-start gap-3'>
-        <Avatar userId={data.user.id} />
+        <Avatar userId={data?.user.id} />
         <div>
           <div className='flex flex-row items-center gap-2'>
             <p
@@ -67,7 +75,7 @@ const PostItem: React.FC<Props> = ({ data = {}, userId }) => {
                 hover:underline
             '
             >
-              {data.user.name}
+              {data?.user.name}
             </p>
             <span
               onClick={goToUser}
@@ -79,11 +87,11 @@ const PostItem: React.FC<Props> = ({ data = {}, userId }) => {
                 md:block
             '
             >
-              @{data.user.username}
+              @{data?.user.username}
             </span>
             <span className='text-neutral-500 text-sm'>{createdAt}</span>
           </div>
-          <div className='text-white mt-1'>{data.body}</div>
+          <div className='text-white mt-1'>{data?.body}</div>
           <div className='flex flex-row items-center mt-3 gap-10'>
             <div
               className='
@@ -98,7 +106,7 @@ const PostItem: React.FC<Props> = ({ data = {}, userId }) => {
             '
             >
               <AiOutlineMessage size={20} />
-              <p>{data.comments?.length || 0}</p>
+              <p>{data?.comments?.length || 0}</p>
             </div>
             <div
               onClick={onLike}
@@ -113,8 +121,12 @@ const PostItem: React.FC<Props> = ({ data = {}, userId }) => {
                 hover:text-red-500
             '
             >
-              <AiOutlineHeart size={20} />
-              <p>{data.likedIds.length}</p>
+              {hasLiked ? (
+                <AiFillHeart className='text-red-500' size={20} />
+              ) : (
+                <AiOutlineHeart size={20} />
+              )}
+              <p>{data?.likedIds.length}</p>
             </div>
           </div>
         </div>

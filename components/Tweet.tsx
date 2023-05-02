@@ -3,11 +3,12 @@ import Avatar from './Avatar'
 import axios from 'axios'
 import useCurrentUser from '@/hooks/useCurrentUser'
 import usePosts from '@/hooks/usePosts'
-import useRegisterModel from '@/hooks/useRegisterModel'
+import useRegisterModel from '@/hooks/useRegisterModal'
 import useLoginModel from '@/hooks/useLoginModal'
 import Button from './Form/Button'
 import usePost from '@/hooks/usePost'
 import { useState, useCallback } from 'react'
+import Loading from './Loading'
 
 interface Props {
   placeholder: string
@@ -29,11 +30,8 @@ const Tweet: React.FC<Props> = ({ placeholder, isComment, postId }) => {
   const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true)
-
       const url = isComment ? `/api/comments?postId=${postId}` : '/api/posts'
-
       await axios.post(url, { body })
-
       toast.success('Tweet created')
       setBody('')
       mutatePosts()
@@ -44,7 +42,6 @@ const Tweet: React.FC<Props> = ({ placeholder, isComment, postId }) => {
       setIsLoading(false)
     }
   }, [body, mutatePosts, isComment, postId, mutatePost])
-
   return (
     <div className='border-b-[1px] border-neutral-800 px-5 py-2'>
       {currentUser ? (

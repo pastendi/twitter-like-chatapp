@@ -1,4 +1,5 @@
 import Header from '@/components/Header'
+import Loading from '@/components/Loading'
 import PostFeed from '@/components/Posts/PostFeed'
 import UserBio from '@/components/User/UserBio'
 import UserHero from '@/components/User/UserHero'
@@ -11,13 +12,7 @@ const UserView = () => {
   const router = useRouter()
   const { userId } = router.query
   const { data: user, isLoading } = useUser(userId as string)
-  if (isLoading || !user) {
-    return (
-      <div className='flex justify-center items-center h-full'>
-        <ClipLoader color='lightBlue' size={80} />
-      </div>
-    )
-  }
+  if (isLoading || !user) return <Loading />
   return (
     <>
       <Header showBackArrow label={user?.username} />

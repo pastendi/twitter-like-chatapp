@@ -1,6 +1,6 @@
 import Layout from '@/components/Layout'
-import LoginModel from '@/components/LoginModel'
-import RegisterModel from '@/components/RegisterModel'
+import LoginModal from '@/components/LoginModal'
+import RegisterModal from '@/components/RegisterModal'
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { Toaster } from 'react-hot-toast'
@@ -12,8 +12,8 @@ export default function App({ Component, pageProps }: AppProps) {
     <SessionProvider session={pageProps.session}>
       <Toaster />
       <EditModal />
-      <RegisterModel />
-      <LoginModel />
+      <RegisterModal />
+      <LoginModal />
       <Layout>
         <Component {...pageProps} />
       </Layout>

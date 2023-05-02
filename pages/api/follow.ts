@@ -19,20 +19,20 @@ export default async function handler(
       throw new Error('Invalid ID')
     }
 
-    let updatedFollowingIds = user.followingIds
+    let newFollowingIds = user.followingIds
     if (user.followingIds.includes(userId)) {
-      updatedFollowingIds = updatedFollowingIds.filter(
+      newFollowingIds = newFollowingIds.filter(
         (followingId) => followingId !== userId
       )
     } else {
-      updatedFollowingIds.push(userId)
+      newFollowingIds.push(userId)
     }
     const updatedUser = await prismaClient.user.update({
       where: {
         id: currentUser.id,
       },
       data: {
-        followingIds: updatedFollowingIds,
+        followingIds: newFollowingIds,
       },
     })
 

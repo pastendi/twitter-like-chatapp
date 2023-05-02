@@ -2,29 +2,29 @@ import { useRouter } from 'next/router'
 import { FaFeather } from 'react-icons/fa'
 import { navLinks } from '../constants'
 import { signOut } from 'next-auth/react'
-import useLoginModel from '@/hooks/useLoginModal'
+import useLoginModal from '@/hooks/useLoginModal'
 import { useCallback } from 'react'
 import useCurrentUser from '@/hooks/useCurrentUser'
 import { BiLogOut } from 'react-icons/bi'
 const Sidebar = () => {
   const { data: currentUser } = useCurrentUser()
-  const loginModel = useLoginModel()
+  const loginModal = useLoginModal()
   const router = useRouter()
   const onTweet = useCallback(() => {
-    loginModel.onOpen()
-  }, [loginModel])
+    loginModal.onOpen()
+  }, [loginModal])
 
   const handleNavigation = useCallback(
     async (auth: boolean, link: string) => {
       if (auth && !currentUser) {
-        loginModel.onOpen()
+        loginModal.onOpen()
       } else if (link === '/users/') {
         router.push(link + currentUser?.id)
       } else {
         router.push(link)
       }
     },
-    [router, loginModel, currentUser]
+    [router, loginModal, currentUser]
   )
   return (
     <div className='col-span-1 h-full pr-4 md:p-4  w-full lg:max-w-[230px]'>
