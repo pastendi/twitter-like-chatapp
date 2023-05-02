@@ -10,24 +10,32 @@ export default async function handler(
     return res.status(405).end()
   }
   try {
+    const { userId } = req.body
     const { currentUser } = await serverAuth(req, res)
-    const { name, username, bio, profileImage, coverImage } = req.body
+    const user = await prismaClient.user.findUnique({
+      where: { id: currentUser.id },
+    })
+    if (!user) {
+      throw new Error('Invalid ID')
+    }
 
-    if (!name || !username) {
-      throw new Error('Missing fields')
+    let updatedFollowingIds = user.followingIds
+    if (user.followingIds.includes(userId)) {
+      updatedFollowingIds = updatedFollowingIds.filter(
+        (followingId) => followingId !== userId
+      )
+    } else {
+      updatedFollowingIds.push(userId)
     }
     const updatedUser = await prismaClient.user.update({
       where: {
         id: currentUser.id,
       },
       data: {
-        name,
-        username,
-        bio,
-        profileImage,
-        coverImage,
+        followingIds: updatedFollowingIds,
       },
     })
+
     return res.status(200).json(updatedUser)
   } catch (error) {
     console.log(error)
