@@ -27,6 +27,27 @@ export default async function handler(
         postId,
       },
     })
+    try {
+      const post = await prismaClient.post.findUnique({
+        where: { id: postId },
+      })
+      if (post?.userId) {
+        await prismaClient.notification.create({
+          data: {
+            body: `${currentUser.name} commented on your tweet`,
+            userId: post.userId,
+          },
+        })
+        await prismaClient.user.update({
+          where: { id: post.userId },
+          data: {
+            hasNotification: true,
+          },
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    }
     return res.status(200).json(comment)
   } catch (error) {
     console.log(error)

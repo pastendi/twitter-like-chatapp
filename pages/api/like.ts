@@ -35,6 +35,27 @@ export default async function handler(
       newlikedIds = newlikedIds.filter((id) => id !== currentUser.id)
     } else {
       newlikedIds.push(currentUser.id)
+      try {
+        const post = await prismaClient.post.findUnique({
+          where: { id: postId },
+        })
+        if (post?.userId) {
+          await prismaClient.notification.create({
+            data: {
+              body: `${currentUser.name} liked your tweet`,
+              userId: post.userId,
+            },
+          })
+          await prismaClient.user.update({
+            where: { id: post.userId },
+            data: {
+              hasNotification: true,
+            },
+          })
+        }
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     const updatedPost = await prismaClient.post.update({

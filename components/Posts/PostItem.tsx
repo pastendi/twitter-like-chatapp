@@ -28,14 +28,19 @@ const PostItem: React.FC<Props> = ({ data }) => {
   )
 
   const goToPost = useCallback(() => {
+    if (!currentUser) {
+      loginModal.onOpen()
+      return
+    }
     router.push(`/posts/${data?.id}`)
-  }, [router, data?.id])
+  }, [router, loginModal, currentUser, data?.id])
 
   const onLike = useCallback(
     async (ev: any) => {
       ev.stopPropagation()
       if (!currentUser) {
         loginModal.onOpen()
+        return
       }
       toggleLike()
     },

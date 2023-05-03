@@ -6,8 +6,11 @@ import useLoginModal from '@/hooks/useLoginModal'
 import { useCallback } from 'react'
 import useCurrentUser from '@/hooks/useCurrentUser'
 import { BiLogOut } from 'react-icons/bi'
+import { BsDot } from 'react-icons/bs'
+import { User } from '@prisma/client'
 const Sidebar = () => {
   const { data: currentUser } = useCurrentUser()
+  const user: User = { ...currentUser }
   const loginModal = useLoginModal()
   const router = useRouter()
   const onTweet = useCallback(() => {
@@ -40,8 +43,14 @@ const Sidebar = () => {
                 index !== 0 && 'md:w-full rounded-3xl'
               } md:hover:bg-opacity-20 md:hover:bg-slate-300`}
             >
-              <div className='rounded-full w-18 h-18 md:h-14 md:w-14 flex items-center justify-center p-4 hover:bg-slate-300 hover:bg-opacity-20 md:hover:bg-transparent cursor-pointer'>
+              <div className='relative rounded-full w-18 h-18 md:h-14 md:w-14 flex items-center justify-center p-4 hover:bg-slate-300 hover:bg-opacity-20 md:hover:bg-transparent cursor-pointer'>
                 <Icon size={28} />
+                {label === 'notifications' && user?.hasNotification ? (
+                  <BsDot
+                    size={80}
+                    className='text-sky-500 absolute -top-4 left-0'
+                  />
+                ) : null}
               </div>
               {index !== 0 && (
                 <p className='capitalize hidden md:block'>{label}</p>

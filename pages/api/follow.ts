@@ -26,6 +26,22 @@ export default async function handler(
       )
     } else {
       newFollowingIds.push(userId)
+      try {
+        await prismaClient.notification.create({
+          data: {
+            body: `${currentUser.name} followed you`,
+            userId,
+          },
+        })
+        await prismaClient.user.update({
+          where: { id: userId },
+          data: {
+            hasNotification: true,
+          },
+        })
+      } catch (error) {
+        console.log(error)
+      }
     }
     const updatedUser = await prismaClient.user.update({
       where: {
