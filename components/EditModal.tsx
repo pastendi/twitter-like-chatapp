@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { toast } from 'react-hot-toast'
 import ModalLayout from './ModalLayout'
 import Input from './Form/Input'
-import ImageUpload from './imageUpload'
+import ImageUpload from './ImageUpload'
 
 const EditModal = () => {
   const { data: user } = useCurrentUser()
